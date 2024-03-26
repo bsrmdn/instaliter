@@ -1,10 +1,12 @@
 import PageLayout from '@/Layouts/PageLayout'
+import React from 'react'
 
-export default function Home({ auth }) {
-
+function Reels({ auth }) {
     return (
         <PageLayout user={auth.user}>
-            <div className=''>testing</div>
+        <div>Reels</div>
         </PageLayout>
     )
 }
+
+export default Reels

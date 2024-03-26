@@ -1,10 +1,12 @@
 import PageLayout from '@/Layouts/PageLayout'
+import React from 'react'
 
-export default function Home({ auth }) {
-
+function Profile({auth}) {
     return (
         <PageLayout user={auth.user}>
-            <div className=''>testing</div>
+        <div>Profile</div>
         </PageLayout>
     )
 }
+
+export default Profile
