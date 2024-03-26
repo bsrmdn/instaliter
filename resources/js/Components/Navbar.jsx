@@ -1,7 +1,6 @@
 import { Switch } from '@headlessui/react'
 import React, { useState } from 'react'
 import NavIcon from './NavButton'
-import { Link, router } from '@inertiajs/react'
 
 function Navbar() {
     const [darkMode, setDarkMode] = useState(document.documentElement.classList.contains('dark'))
