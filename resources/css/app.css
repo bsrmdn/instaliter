@@ -16,4 +16,16 @@
         scrollbar-width: none;
         /* Firefox */
     }
+
+    ::-webkit-scrollbar {
+        background: rgb(32, 31, 31);
+        width: 0.5rem;
+    }
+
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: dimgray;
+        border-radius: 1rem;
+    }
 }
