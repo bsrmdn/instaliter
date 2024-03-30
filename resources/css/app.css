@@ -17,14 +17,14 @@
         /* Firefox */
     }
 
-    ::-webkit-scrollbar {
+    .dark\:::-webkit-scrollbar {
         background: rgb(32, 31, 31);
         width: 0.5rem;
     }
 
 
     /* Handle */
-    ::-webkit-scrollbar-thumb {
+    .dark\:::-webkit-scrollbar-thumb {
         background: dimgray;
         border-radius: 1rem;
     }

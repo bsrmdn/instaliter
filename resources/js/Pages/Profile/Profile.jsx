@@ -1,10 +1,11 @@
 import PageLayout from '@/Layouts/PageLayout'
 import React from 'react'
 
-function Profile({auth}) {
+function Profile({ auth }) {
+    console.log('auth: ', auth);
     return (
-        <PageLayout user={auth.user}>
-        <div>Profile</div>
+        <PageLayout>
+            <div></div>
         </PageLayout>
     )
 }

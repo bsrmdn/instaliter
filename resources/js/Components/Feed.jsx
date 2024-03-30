@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { createContext } from 'react'
 import Avatar from './Avatar'
 
-function Feed(props) {
+function Feed({ post }) {
     return (
-        <div className="feed-wrapper mb-4 w-9/12">
-            <div className="feed-item border-b border-gray-50 border-opacity-15 bg-white dark:bg-black">
-                <HeaderFeed />
-                <ImageFeed />
+        <div key={post.key} className="feed-wrapper mb-4 w-9/12">
+            <div className="feed-item border-b dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 bg-white dark:bg-black">
+                <HeaderFeed user={post.user} />
+                <ImageFeed image={post.image} />
                 <div className="card-footer py-4">
                     <div className="top">
                         <ButtonInteractionsFeed />
@@ -16,8 +16,8 @@ function Feed(props) {
                             </span>
                         </div>
                         <div className="caption text-sm mt-3">
-                            <b>apple </b>
-                            new Iphone release ✨
+                            <b>{post.user.name} </b>
+                            {post.caption}
                         </div>
                         <div className="post-date mt-1">
                             <span className="text-xs dark:text-gray-50 opacity-40 text-gray-900">
@@ -38,14 +38,14 @@ function Feed(props) {
     )
 }
 
-function HeaderFeed() {
+function HeaderFeed({ user }) {
     return (
         <div className="header py-1 flex justify-between items-center">
             <div className="left flex flex-row items-center">
                 <Avatar className='w-10' avatarOnly />
                 <div className="user-name-and-place flex flex-col ms-4">
-                    <span className="text-sm font-bold">apple</span>
-                    <span className="text-xs font-light text-gray-900 dark:text-gray-50">Chiapas, Mexico</span>
+                    <span className="text-sm font-bold">{user.name}</span>
+                    {/* <span className="text-xs font-light text-gray-900 dark:text-gray-50">Chiapas, Mexico</span> */}
                 </div>
             </div>
             <div className="right">
@@ -61,10 +61,10 @@ function HeaderFeed() {
 
 
 
-function ImageFeed() {
+function ImageFeed({ image }) {
     return (
-        <div className="feed-img rounded border-gray-50 border-opacity-15 border">
-            <img src="https://images.unsplash.com/photo-1512054502232-10a0a035d672?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="" />
+        <div className="feed-img rounded dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 border">
+            <img src={'storage/' + image} alt="" />
         </div>
     );
 }

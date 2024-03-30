@@ -16,5 +16,3 @@ export default function Guest({ children }) {
         </div>
     );
 }
-
-rc

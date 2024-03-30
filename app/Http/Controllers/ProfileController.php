@@ -15,7 +15,7 @@ class ProfileController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('Profile/index');
+        return Inertia::render('Profile/Profile');
     }
     /**
      * Display the user's profile form.

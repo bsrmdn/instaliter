@@ -1,7 +1,9 @@
 import { Switch } from '@headlessui/react'
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import NavIcon from './NavButton'
 import ModalCreate from './ModalCreate'
+import { Auth } from '@/Data/Auth'
+import Avatar from './Avatar'
 
 function Navbar() {
     const [darkMode, setDarkMode] = useState(document.documentElement.classList.contains('dark'))
@@ -9,9 +11,10 @@ function Navbar() {
 
     const [open, setOpen] = useState(false)
     const cancelButtonRef = useRef(null)
+    const auth = useContext(Auth)
 
     return (
-        <div className="fixed flex flex-col justify-items-start border-e border-gray-50 border-opacity-15 bg-clip-border bg-white dark:bg-black text-gray-700 dark:text-white h-screen w-full max-w-64 p-4 ">
+        <div className="fixed flex flex-col justify-items-start border-e dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 bg-clip-border bg-white dark:bg-black text-gray-700 dark:text-white h-screen w-full max-w-64 p-4 ">
             <div className="mb-6 py-4 px-2">
                 <p className="block antialiased tracking-normal font-serif text-2xl font-semibold leading-snug text-gray-900 dark:text-white">Instaliter</p>
             </div>
@@ -46,10 +49,10 @@ function Navbar() {
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth={1.5} stroke="currentColor" className="w-7">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <ModalCreate open={open} setOpen={setOpen} cancelButtonRef={cancelButtonRef}></ModalCreate>
+                    <ModalCreate open={open} setOpen={setOpen} cancelButtonRef={cancelButtonRef} user={auth.user}></ModalCreate>
                 </NavIcon>
                 <NavIcon name="Profile" to='profile'>
-
+                    <Avatar className={'w-7'} avatarOnly avatar={auth.user.avatar} />
                 </NavIcon>
 
                 <div className='mt-auto flex gap-4 self-center'>
