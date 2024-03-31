@@ -1,44 +1,22 @@
-import React, { createContext } from 'react'
+import React, { useContext } from 'react'
 import Avatar from './Avatar'
+import Dropdown from './Dropdown';
+import { Auth } from '@/Data/Auth';
 
-function Feed({ post }) {
+
+const Feed = ({ children }) => {
+
     return (
-        <div key={post.key} className="feed-wrapper mb-4 w-9/12">
+        <div className="feed-wrapper mb-4 w-9/12">
             <div className="feed-item border-b dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 bg-white dark:bg-black">
-                <HeaderFeed user={post.user} />
-                <ImageFeed image={post.image} />
-                <div className="card-footer py-4">
-                    <div className="top">
-                        <ButtonInteractionsFeed />
-                        <div className="likes mt-1">
-                            <span className="font-bold text-sm">
-                                122,780 likes
-                            </span>
-                        </div>
-                        <div className="caption text-sm mt-3">
-                            <b>{post.user.name} </b>
-                            {post.caption}
-                        </div>
-                        <div className="post-date mt-1">
-                            <span className="text-xs dark:text-gray-50 opacity-40 text-gray-900">
-                                1 minute ago
-                            </span>
-                        </div>
-                    </div>
-                    <div className="pt-3 mt-3">
-                        <div className="wrapper flex">
-                            <input type="text" className="text-sm mt-0 block w-full px-0.5 border-0 focus:ring-0 bg-transparent" placeholder="Add a comment" />
-                            <button className="text-blue-500 opacity-75 w-2/12 text-right font-bold">post</button>
-                        </div>
-
-                    </div>
-                </div>
+                {children}
             </div>
         </div>
     )
 }
 
-function HeaderFeed({ user }) {
+const Header = ({ user, children }) => {
+    const authUser = useContext(Auth)
     return (
         <div className="header py-1 flex justify-between items-center">
             <div className="left flex flex-row items-center">
@@ -48,22 +26,37 @@ function HeaderFeed({ user }) {
                     {/* <span className="text-xs font-light text-gray-900 dark:text-gray-50">Chiapas, Mexico</span> */}
                 </div>
             </div>
-            <div className="right">
-                <svg aria-label="More options" className="_8-yf5 fill-black dark:fill-white" height="16" viewBox="0 0 48 48" width="16">
-                    <circle clipRule="evenodd" cx="8" cy="24" fillRule="evenodd" r="4.5"></circle>
-                    <circle clipRule="evenodd" cx="24" cy="24" fillRule="evenodd" r="4.5"></circle>
-                    <circle clipRule="evenodd" cx="40" cy="24" fillRule="evenodd" r="4.5"></circle>
-                </svg>
-            </div>
+            <Dropdown>
+                <Dropdown.Trigger>
+                    <svg aria-label="More options" className="_8-yf5 fill-black dark:fill-white" height="16" viewBox="0 0 48 48" width="16">
+                        <circle clipRule="evenodd" cx="8" cy="24" fillRule="evenodd" r="4.5"></circle>
+                        <circle clipRule="evenodd" cx="24" cy="24" fillRule="evenodd" r="4.5"></circle>
+                        <circle clipRule="evenodd" cx="40" cy="24" fillRule="evenodd" r="4.5"></circle>
+                    </svg>
+                </Dropdown.Trigger>
+                {authUser.user.name == user.name &&
+                    <Dropdown.Content contentClasses='py-1 flex flex-col bg-white dark:bg-neutral-900 border dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15'>
+                        {children}
+                    </Dropdown.Content>
+                }
+            </Dropdown>
         </div>
     );
 }
 
-
-
-function ImageFeed({ image }) {
+const HeaderDropdown = ({ className = '', children, ...props }) => {
     return (
-        <div className="feed-img rounded dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 border">
+        <button type='button' {...props} className={`hover:bg-gray-300 hover:bg-opacity-30 dark:hover:bg-gray-50 dark:hover:bg-opacity-15 ${className}`}>
+            {children}
+        </button>
+    )
+}
+
+
+
+const Image = ({ image }) => {
+    return (
+        <div className="feed-img rounded min-h-72 items-center dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 border">
             <img src={'storage/' + image} alt="" />
         </div>
     );
@@ -72,7 +65,7 @@ function ImageFeed({ image }) {
 
 
 
-function ButtonInteraction(props) {
+const ButtonInteraction = (props) => {
     return (
         <div className="button-interaction">
             <svg aria-label={props.name} className='fill-black dark:fill-white' height="24" viewBox="0 0 48 48" width="24">
@@ -83,7 +76,7 @@ function ButtonInteraction(props) {
 }
 
 
-function ButtonInteractionsFeed() {
+const ButtonInteractionsFeed = () => {
     return (
         <div className="icons flex flex-row justify-between items-center">
             <div className="left flex flex-row gap-4">
@@ -105,6 +98,40 @@ function ButtonInteractionsFeed() {
         </div>
     );
 }
+
+const Bottom = (props) => {
+    return (<div className="card-footer py-4">
+        <div className="top">
+            <ButtonInteractionsFeed />
+            <div className="likes mt-1">
+                <span className="font-bold text-sm">
+                    122,780 likes
+                </span>
+            </div>
+            <div className="caption text-sm mt-3">
+                <b>{props.name} </b>
+                {props.caption}
+            </div>
+            <div className="post-date mt-1">
+                <span className="text-xs dark:text-gray-50 opacity-40 text-gray-900">
+                    1 minute ago
+                </span>
+            </div>
+        </div>
+        <div className="pt-3 mt-3">
+            <div className="wrapper flex">
+                <input type="text" className="text-sm mt-0 block w-full px-0.5 border-0 focus:ring-0 bg-transparent" placeholder="Add a comment" />
+                <button className="text-blue-500 opacity-75 w-2/12 text-right font-bold">post</button>
+            </div>
+
+        </div>
+    </div>);
+}
+
+Feed.Header = Header
+Feed.HeaderDropdown = HeaderDropdown
+Feed.Image = Image
+Feed.Bottom = Bottom
 
 
 export default Feed

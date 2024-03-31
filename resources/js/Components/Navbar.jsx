@@ -1,9 +1,9 @@
 import { Switch } from '@headlessui/react'
 import React, { useContext, useRef, useState } from 'react'
 import NavIcon from './NavButton'
-import ModalCreate from './ModalCreate'
 import { Auth } from '@/Data/Auth'
 import Avatar from './Avatar'
+import ModalCreate from './Modal/ModalCreate'
 
 function Navbar() {
     const [darkMode, setDarkMode] = useState(document.documentElement.classList.contains('dark'))
@@ -49,7 +49,7 @@ function Navbar() {
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth={1.5} stroke="currentColor" className="w-7">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <ModalCreate open={open} setOpen={setOpen} cancelButtonRef={cancelButtonRef} user={auth.user}></ModalCreate>
+                    <ModalCreate formtype={"Create"} open={open} setOpen={setOpen} cancelButtonRef={cancelButtonRef} user={auth.user}></ModalCreate>
                 </NavIcon>
                 <NavIcon name="Profile" to='profile'>
                     <Avatar className={'w-7'} avatarOnly avatar={auth.user.avatar} />

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,7 +15,8 @@ class PostController extends Controller
     public function index()
     {
         return Inertia::render('Home', [
-            'posts' => Post::all()
+            'posts' => Post::all(),
+            'users' => User::all(['name'])
         ]);
     }
 
@@ -31,9 +33,10 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // return dd('$request: ', $request);
         $validatedData = $request->validate([
-            'image' => 'image|file',
-            'caption' => 'required'
+            'image' => 'image|file|required',
+            'caption' => 'string|required'
         ]);
 
         if ($request->file('image')) {
@@ -68,7 +71,24 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $validatedData = $request->validate([
+            'image' => 'nullable|image|file',
+            'caption' => 'nullable|string'
+        ]);
+
+        if ($request->file('image'))
+            $validatedData['image'] = $request->file('image')->store('post-images');
+        else
+            $validatedData['image'] = $post->image;
+
+
+        if (is_null($request->input('caption')))
+            $validatedData['caption'] = $post->caption;
+
+        // $validatedData['user_id'] = auth()->user()->id;
+        // return dd($validatedData);
+
+        Post::where('id', $post->id)->update($validatedData);
     }
 
     /**
@@ -76,6 +96,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        // return redirect()->back();
     }
 }
