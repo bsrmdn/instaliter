@@ -4,9 +4,10 @@ import Avatar from '../Avatar'
 import { useForm } from '@inertiajs/react'
 import Modal from './Modal'
 import { useEffect, useState } from 'react'
+import InputError from '../InputError'
 
 export default function ModalCreate({ open, setOpen, cancelButtonRef, user }) {
-    const { data, setData, post, errors, reset, progress } = useForm({
+    const { data, setData, post, errors, reset, progress, processing } = useForm({
         image: null,
         caption: null,
     })
@@ -66,7 +67,7 @@ export default function ModalCreate({ open, setOpen, cancelButtonRef, user }) {
                         Create new post
                     </Dialog.Title>
 
-                    <button type='submit' className='text-blue-500 hover:dark:text-white hover:text-black text-sm font-bold'>Share</button>
+                    <button type='submit' disabled={processing} className='text-blue-500 hover:dark:text-white hover:text-black text-sm font-bold'>Share</button>
                 </div>
                 <div className="flex grow dark:text-white">
                     <div className="flex flex-col w-7/12 p-4 grow items-center justify-center border-e dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15">
@@ -84,7 +85,7 @@ export default function ModalCreate({ open, setOpen, cancelButtonRef, user }) {
                                 </PrimaryButton>
                             </>
                         }
-                        {errors.image && <div className="bg-red-600 text-white text-center px-5"> image must be added</div>}
+                        {errors.image && <InputError message={"Image must be added"} />}
                     </div>
                     <div className="w-5/12 px-4">
 
@@ -96,7 +97,7 @@ export default function ModalCreate({ open, setOpen, cancelButtonRef, user }) {
                             </div>
                         </div>
                         <textarea className='border-0 bg-transparent w-full h-1/5 focus:ring-0 resize-none' placeholder='Write a caption...' onChange={e => setData('caption', e.target.value)} />
-                        {errors.caption && <div className="bg-red-600 text-white text-center"> caption must be added</div>}
+                        {errors.caption && <InputError message={"Caption must be added"} />}
                     </div>
                 </div>
             </form>

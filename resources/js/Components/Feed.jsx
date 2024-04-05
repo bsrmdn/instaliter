@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
 import Avatar from './Avatar'
 import Dropdown from './Dropdown';
-import { Auth } from '@/Data/Auth';
+import { Auth } from '@/Context/Auth';
 
 
 const Feed = ({ children }) => {
 
     return (
-        <div className="feed-wrapper mb-4 w-9/12">
+        <div className="feed-wrapper mb-4 w-full max-w-[29rem]">
             <div className="feed-item border-b dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 bg-white dark:bg-black">
                 {children}
             </div>
@@ -22,19 +22,19 @@ const Header = ({ user, children }) => {
             <div className="left flex flex-row items-center">
                 <Avatar className='w-10' avatarOnly />
                 <div className="user-name-and-place flex flex-col ms-4">
-                    <span className="text-sm font-bold">{user.name}</span>
+                    <span className="text-sm font-bold">{user.username}</span>
                     {/* <span className="text-xs font-light text-gray-900 dark:text-gray-50">Chiapas, Mexico</span> */}
                 </div>
             </div>
             <Dropdown>
-                <Dropdown.Trigger>
+                <Dropdown.Trigger canOpen={authUser.user.username == user.username}>
                     <svg aria-label="More options" className="_8-yf5 fill-black dark:fill-white" height="16" viewBox="0 0 48 48" width="16">
                         <circle clipRule="evenodd" cx="8" cy="24" fillRule="evenodd" r="4.5"></circle>
                         <circle clipRule="evenodd" cx="24" cy="24" fillRule="evenodd" r="4.5"></circle>
                         <circle clipRule="evenodd" cx="40" cy="24" fillRule="evenodd" r="4.5"></circle>
                     </svg>
                 </Dropdown.Trigger>
-                {authUser.user.name == user.name &&
+                {authUser.user.username == user.username &&
                     <Dropdown.Content contentClasses='py-1 flex flex-col bg-white dark:bg-neutral-900 border dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15'>
                         {children}
                     </Dropdown.Content>
@@ -56,7 +56,7 @@ const HeaderDropdown = ({ className = '', children, ...props }) => {
 
 const Image = ({ image }) => {
     return (
-        <div className="feed-img rounded min-h-72 items-center dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 border">
+        <div className="feed-img flex rounded min-h-72 max-h-[36rem] items-center dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 border">
             <img src={'storage/' + image} alt="" />
         </div>
     );
@@ -100,23 +100,24 @@ const ButtonInteractionsFeed = () => {
 }
 
 const Bottom = (props) => {
+    console.log('props: ', props);
     return (<div className="card-footer py-4">
         <div className="top">
             <ButtonInteractionsFeed />
             <div className="likes mt-1">
                 <span className="font-bold text-sm">
-                    122,780 likes
+                    0 likes
                 </span>
             </div>
             <div className="caption text-sm mt-3">
                 <b>{props.name} </b>
                 {props.caption}
             </div>
-            <div className="post-date mt-1">
+            {/* <div className="post-date mt-1">
                 <span className="text-xs dark:text-gray-50 opacity-40 text-gray-900">
-                    1 minute ago
+                    0 minute ago
                 </span>
-            </div>
+            </div> */}
         </div>
         <div className="pt-3 mt-3">
             <div className="wrapper flex">

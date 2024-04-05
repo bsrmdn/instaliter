@@ -2,21 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use App\Models\Post;
+use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class ProfileController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('Profile/Profile');
+        return Inertia::render('Profile/Profile', [
+            'user' => auth()->user(),
+            'posts' => Post::all()->where('user_id', '==', auth()->user()->id),
+        ]);
     }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(User $user)
+    {
+        //
+    }
+
     /**
      * Display the user's profile form.
      */

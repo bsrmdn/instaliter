@@ -1,7 +1,7 @@
 import { Switch } from '@headlessui/react'
 import React, { useContext, useRef, useState } from 'react'
 import NavIcon from './NavButton'
-import { Auth } from '@/Data/Auth'
+import { Auth } from '@/Context/Auth'
 import Avatar from './Avatar'
 import ModalCreate from './Modal/ModalCreate'
 
@@ -14,12 +14,12 @@ function Navbar() {
     const auth = useContext(Auth)
 
     return (
-        <div className="fixed flex flex-col justify-items-start border-e dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 bg-clip-border bg-white dark:bg-black text-gray-700 dark:text-white h-screen w-full max-w-64 p-4 ">
+        <div className="fixed flex flex-col justify-items-start border-e h-screen w-16 xl:w-60 p-2 xl:p-4 dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 bg-clip-border bg-white dark:bg-black text-gray-700 dark:text-white">
             <div className="mb-6 py-4 px-2">
-                <p className="block antialiased tracking-normal font-serif text-2xl font-semibold leading-snug text-gray-900 dark:text-white">Instaliter</p>
+                <p className="hidden xl:block antialiased tracking-normal font-serif text-2xl font-semibold leading-snug text-gray-900 dark:text-white">Instaliter</p>
             </div>
 
-            <nav className="flex flex-col gap-3 h-full min-w-40 font-sans text-base font-medium text-gray-700 dark:text-white">
+            <nav className="flex flex-col gap-3 h-full font-sans text-base font-medium text-gray-700 dark:text-white">
                 <NavIcon name="Home" to='home'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth={1.5} stroke="currentColor" className="w-7">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
@@ -55,18 +55,18 @@ function Navbar() {
                     <Avatar className={'w-7'} avatarOnly avatar={auth.user.avatar} />
                 </NavIcon>
 
-                <div className='mt-auto flex gap-4 self-center'>
-                    <div className='self-center'>
+                <div className='xl:mt-auto my-auto xl:my-0 flex gap-4 self-center'>
+                    <div className='self-center hidden xl:block'>
                         Dark Mode
                     </div>
                     <Switch
                         checked={darkMode}
                         onChange={() => setDarkMode(!darkMode)}
-                        className={`${darkMode ? 'bg-white' : 'bg-black'} relative shrink-0 inline-flex h-[38px] w-[76px] mt-auto cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white/75`}>
+                        className={`${darkMode ? 'bg-white' : 'bg-gray-300'} relative -rotate-90 xl:rotate-0 shrink-0 inline-flex h-[38px] w-[76px] mt-auto cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white/75`}>
                         <span className="sr-only">Change Appearence</span>
                         <span
                             aria-hidden="true"
-                            className={`${darkMode ? 'translate-x-9' : 'translate-x-0'} pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white dark:bg-black shadow-lg ring-0 transition duration-200 ease-in-out`} />
+                            className={`${darkMode ? 'translate-x-9' : 'translate-x-0'} pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white dark:bg-black shadow-xl ring-0 transition duration-200 ease-in-out`} />
                     </Switch>
                 </div>
             </nav>

@@ -18,12 +18,12 @@ const Dropdown = ({ children }) => {
     );
 };
 
-const Trigger = ({ children }) => {
+const Trigger = ({ children, canOpen = true }) => {
     const { open, setOpen, toggleOpen } = useContext(DropDownContext);
 
     return (
         <>
-            <button onClick={toggleOpen}>{children}</button>
+            <button onClick={canOpen ? toggleOpen : undefined}>{children}</button>
 
             {open && <div className="fixed inset-0 z-40" onClick={() => setOpen(false)}></div>}
         </>

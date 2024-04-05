@@ -7,12 +7,35 @@ import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset, setError, clearErrors } = useForm({
         name: '',
+        username: '',
         email: '',
         password: '',
         password_confirmation: '',
     });
+
+    const usernameHandler = (e) => {
+        const isLowerCase = (str) => str === str.toLowerCase() && str !== str.toUpperCase()
+        const hasWhiteSpace = (str) => str.indexOf(' ') >= 0
+
+        const regex = /[^a-zA-Z0-9_.]/g
+
+        if (!isLowerCase(e.target.value) && e.target.value != '') {
+            setError('username', 'username must be lowercase')
+            setData('username', e.target.value.toLowerCase())
+
+        } else if (regex.test(e.target.value)) {
+            setError('username', 'username must be only contain alphanumeric code, ., _')
+            setData('username', e.target.value.replace(regex, ''))
+        } else if (hasWhiteSpace(e.target.value)) {
+            setError('username', 'username cannot contain space')
+            setData('username', e.target.value.trim())
+        } else {
+            clearErrors('username')
+            setData('username', e.target.value)
+        }
+    }
 
     useEffect(() => {
         return () => {
@@ -32,6 +55,23 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div>
+                    <InputLabel htmlFor="username" value="Username" />
+
+                    <TextInput
+                        id="username"
+                        name="username"
+                        value={data.username}
+                        className="mt-1 block w-full"
+                        // autoComplete="username"
+                        isFocused={true}
+                        onChange={(e) => usernameHandler(e)}
+                        required
+                    />
+
+                    <InputError message={errors.username} className="mt-2" />
+                </div>
+
+                <div className='mt-4'>
                     <InputLabel htmlFor="name" value="Name" />
 
                     <TextInput
@@ -48,6 +88,7 @@ export default function Register() {
                     <InputError message={errors.name} className="mt-2" />
                 </div>
 
+
                 <div className="mt-4">
                     <InputLabel htmlFor="email" value="Email" />
 
@@ -57,7 +98,7 @@ export default function Register() {
                         name="email"
                         value={data.email}
                         className="mt-1 block w-full"
-                        autoComplete="username"
+                        autoComplete="email"
                         onChange={(e) => setData('email', e.target.value)}
                         required
                     />
