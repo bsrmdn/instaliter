@@ -1,12 +1,19 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
-export default function Modal({ children, show = false, maxWidth = '2xl', closeable = true, onClose = () => { }, cancelButtonRef }) {
+export default function Modal({ show, children, maxWidth = '2xl', closeable = true, onClose = () => { }, modalRef }) {
     const close = () => {
         if (closeable) {
             onClose()
         }
     }
+
+    const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        setOpen(true)
+    }, [show])
+
 
     const maxWidthClass = {
         sm: 'sm:max-w-sm',
@@ -17,13 +24,13 @@ export default function Modal({ children, show = false, maxWidth = '2xl', closea
     }[maxWidth];
 
     return (
-        <Transition show={show} as={Fragment} leave="duration-200">
+        <Transition show={open} as={Fragment} leave="duration-200">
             <Dialog
                 as="div"
                 id="modal"
-                className="fixed inset-0 flex overflow-y-auto px-4 py-6 sm:px-0 items-center z-50 transform transition-all"
+                className="fixed inset-0 flex overflow-y-auto px-4 py-6 sm:px-0 items-center z-50 transform"
                 onClose={close}
-                initialFocus={cancelButtonRef}
+                initialFocus={modalRef}
             >
                 <Transition.Child
                     as={Fragment}
@@ -34,7 +41,18 @@ export default function Modal({ children, show = false, maxWidth = '2xl', closea
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="absolute inset-0 bg-zinc-950 bg-opacity-75 transition-opacity" />
+                    <div className="absolute inset-0 bg-zinc-950 bg-opacity-75 transition-opacity" >
+                        <button
+                            type="button"
+                            className="absolute top-7 right-7 text-white"
+                            ref={modalRef}
+
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
                 </Transition.Child>
 
                 <Transition.Child
@@ -47,7 +65,7 @@ export default function Modal({ children, show = false, maxWidth = '2xl', closea
                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                     <Dialog.Panel
-                        className={`mb-6 bg-slate-50 dark:bg-neutral-900 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full mx-auto ${maxWidthClass}`}
+                        className={`mb-6 bg-slate-50 dark:bg-neutral-900 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-[calc(100vw-8rem)] max-h-[calc(100vw-4rem)] mx-auto ${maxWidth}`}
                     >
                         {children}
                     </Dialog.Panel>

@@ -1,17 +1,18 @@
 import { Switch } from '@headlessui/react'
 import React, { useContext, useRef, useState } from 'react'
-import NavIcon from './NavButton'
-import { Auth } from '@/Context/Auth'
-import Avatar from './Avatar'
-import ModalCreate from './Modal/ModalCreate'
+import NavIcon from '../Components/NavButton'
+import { AuthContext } from '@/Context/Context'
+import Avatar from '../Components/Avatar'
+import ModalCreate from '../Components/Modal/ModalCreate'
 
-function Navbar() {
+function Navbar({ setIsUploading = () => { } }) {
     const [darkMode, setDarkMode] = useState(document.documentElement.classList.contains('dark'))
     darkMode ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark")
 
-    const [open, setOpen] = useState(false)
-    const cancelButtonRef = useRef(null)
-    const auth = useContext(Auth)
+    const [showModal, setShowModal] = useState(false)
+    const auth = useContext(AuthContext)
+
+
 
     return (
         <div className="fixed flex flex-col justify-items-start border-e h-screen w-16 xl:w-60 p-2 xl:p-4 dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 bg-clip-border bg-white dark:bg-black text-gray-700 dark:text-white">
@@ -45,11 +46,11 @@ function Navbar() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
                     </svg>
                 </NavIcon>
-                <NavIcon name="Create" onClick={() => setOpen(true)} button>
+                <NavIcon name="Create" onClick={() => setShowModal(true)} button>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth={1.5} stroke="currentColor" className="w-7">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <ModalCreate formtype={"Create"} open={open} setOpen={setOpen} cancelButtonRef={cancelButtonRef} user={auth.user}></ModalCreate>
+                    {showModal && <ModalCreate setOpen={setShowModal} setIsUploading={setIsUploading} user={auth.user}></ModalCreate>}
                 </NavIcon>
                 <NavIcon name="Profile" to='profile'>
                     <Avatar className={'w-7'} avatarOnly avatar={auth.user.avatar} />

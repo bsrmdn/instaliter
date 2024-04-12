@@ -17,9 +17,10 @@ class ProfileController extends Controller
 {
     public function index(): Response
     {
+        $user = Auth::user();
         return Inertia::render('Profile/Profile', [
-            'user' => auth()->user(),
-            'posts' => Post::all()->where('user_id', '==', auth()->user()->id),
+            'user' => $user,
+            'posts' => Post::byUser($user->id)->get(),
         ]);
     }
 
@@ -28,7 +29,13 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        //
+        if ($user->id == Auth::id())
+            return redirect(route('profile'));
+
+        return Inertia::render('Profile/Profile', [
+            'user' => $user,
+            'posts' => Post::byUser($user->id)->get(),
+        ]);
     }
 
     /**

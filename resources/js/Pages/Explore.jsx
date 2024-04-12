@@ -1,12 +1,13 @@
 import PageLayout from '@/Layouts/PageLayout'
 import React from 'react'
 
-function Explore({ auth }) {
+function Explore() {
     return (
-        <PageLayout user={auth.user}>
         <div>Explore</div>
-        </PageLayout>
     )
 }
 
+Explore.PageLayout = (page) => <PageLayout children={page} />
+
 export default Explore
+

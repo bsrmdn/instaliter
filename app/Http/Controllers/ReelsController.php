@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Inertia\Response;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -13,7 +14,11 @@ class ReelsController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Reels');
+        return dd('test');
+        $posts = Post::all();
+        return Inertia::render('Reels', [
+            'posts' => $posts
+        ]);
     }
 
     /**

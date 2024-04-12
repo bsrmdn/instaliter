@@ -46,6 +46,7 @@ export default function Register() {
     const submit = (e) => {
         e.preventDefault();
 
+        console.log('route(register): ', route('register'));
         post(route('register'));
     };
 
@@ -53,7 +54,7 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} className='dark:text-white'>
                 <div>
                     <InputLabel htmlFor="username" value="Username" />
 
@@ -62,7 +63,7 @@ export default function Register() {
                         name="username"
                         value={data.username}
                         className="mt-1 block w-full"
-                        // autoComplete="username"
+                        autoComplete="username"
                         isFocused={true}
                         onChange={(e) => usernameHandler(e)}
                         required

@@ -2,17 +2,19 @@ import { Dialog } from '@headlessui/react'
 import PrimaryButton from '../PrimaryButton'
 import Avatar from '../Avatar'
 import { router, useForm } from '@inertiajs/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Modal from './Modal'
 
 
-function ModalEdit({ post, open, setOpen, cancelButtonRef }) {
+function ModalEdit({ post, open, setOpen }) {
 
     const { data, setData, patch, errors, reset, progress, processing } = useForm({
         image: null,
         caption: null,
     })
     const [fileDataURL, setFileDataURL] = useState(null);
+    const modalRef = useRef(null)
+
 
     useEffect(() => {
         let fileReader, isCancel = false;
@@ -54,7 +56,7 @@ function ModalEdit({ post, open, setOpen, cancelButtonRef }) {
         setData('image', e.dataTransfer.files[0])
     }
     return (
-        <Modal show={open} onClose={setOpen} cancelButtonRef={cancelButtonRef}>
+        <Modal show={open} onClose={setOpen} modalRef={modalRef}>
             <form className='flex flex-col h-[75vh]' onSubmit={handleSubmit} onDrop={onDropHandler} onDragOver={e => e.preventDefault()}>
                 {progress && <progress value={progress.percentage} max={100} className='w-full h-1' />}
                 <div className="flex justify-between p-3 border-b dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15">
@@ -65,7 +67,7 @@ function ModalEdit({ post, open, setOpen, cancelButtonRef }) {
                             setOpen(false)
                             reset()
                         }}
-                        ref={cancelButtonRef}
+                        ref={modalRef}
                     >
                         X
                     </button>

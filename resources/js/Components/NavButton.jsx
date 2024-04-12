@@ -3,14 +3,12 @@ import React from 'react'
 
 function NavIcon(props) {
     const { url, component } = usePage()
-
-
-
+    const isActive = url == '/' + component.toLowerCase()
 
     return (
         {
             ...!props.button ?
-                <Link as='button' method={props.method ? props.method : 'get'} href={typeof route(props.to) == 'string' && route(props.to)} role="button" tabIndex="0" className={` ${component.toLowerCase().startsWith(props.to) && 'bg-gray-300 bg-opacity-30 dark:bg-gray-50 dark:bg-opacity-15'} flex items-center justify-center xl:justify-normal w-full p-2 rounded-xl text-start leading-tight transition-all hover:bg-gray-300 hover:bg-opacity-30 dark:hover:bg-gray-50 dark:hover:bg-opacity-15 text-black dark:text-white outline-none`}>
+                <Link as='button' method={props.method ? props.method : 'get'} href={typeof route(props.to) == 'string' && route(props.to)} role="button" tabIndex="0" className={` ${isActive && 'bg-gray-300 bg-opacity-30 dark:bg-gray-50 dark:bg-opacity-15'} flex items-center justify-center xl:justify-normal w-full p-2 rounded-xl text-start leading-tight transition-all hover:bg-gray-300 hover:bg-opacity-30 dark:hover:bg-gray-50 dark:hover:bg-opacity-15 text-black dark:text-white outline-none`}>
                     <div className="grid place-items-center xl:mr-4">
                         {props.children}
                     </div>

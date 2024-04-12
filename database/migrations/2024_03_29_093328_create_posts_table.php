@@ -14,9 +14,9 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->string('image');
-            $table->string('caption');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('image')->required();
+            $table->string('caption')->required();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

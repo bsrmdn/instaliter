@@ -3,15 +3,17 @@ import PrimaryButton from '../PrimaryButton'
 import Avatar from '../Avatar'
 import { useForm } from '@inertiajs/react'
 import Modal from './Modal'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import InputError from '../InputError'
 
-export default function ModalCreate({ open, setOpen, cancelButtonRef, user }) {
+export default function ModalCreate({ open, setOpen, user }) {
     const { data, setData, post, errors, reset, progress, processing } = useForm({
         image: null,
         caption: null,
     })
     const [fileDataURL, setFileDataURL] = useState(null);
+    const modalRef = useRef(null)
+
 
     useEffect(() => {
         let fileReader, isCancel = false;
@@ -48,7 +50,7 @@ export default function ModalCreate({ open, setOpen, cancelButtonRef, user }) {
     }
 
     return (
-        <Modal show={open} onClose={setOpen} cancelButtonRef={cancelButtonRef}>
+        <Modal show={open} onClose={setOpen} modalRef={modalRef} maxWidth='max-w-4xl'>
             <form className='flex flex-col h-[75vh]' onSubmit={handleSubmit} onDrop={onDropHandler} onDragOver={e => e.preventDefault()}>
                 {progress && <progress value={progress.percentage} max={100} className='w-full h-1' />}
                 <div className="flex justify-between p-3 border-b dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15">
@@ -59,7 +61,7 @@ export default function ModalCreate({ open, setOpen, cancelButtonRef, user }) {
                             setOpen(false)
                             reset()
                         }}
-                        ref={cancelButtonRef}
+                        ref={modalRef}
                     >
                         X
                     </button>
