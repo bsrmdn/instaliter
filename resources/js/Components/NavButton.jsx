@@ -1,9 +1,9 @@
-import { Link, usePage } from '@inertiajs/react'
+import { Link/*, usePage*/ } from '@inertiajs/react'
 import React from 'react'
 
 function NavIcon(props) {
-    const { url, component } = usePage()
-    const isActive = url == '/' + component.toLowerCase()
+    // const { url, component } = usePage()
+    const isActive = route().current(`${props.to}`)
 
     return (
         {

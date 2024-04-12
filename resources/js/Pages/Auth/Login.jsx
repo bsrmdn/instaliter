@@ -21,9 +21,13 @@ export default function Login({ status, canResetPassword }) {
     }, []);
 
     const submit = (e) => {
+        console.log('e: ', e);
+
         e.preventDefault();
 
-        post(route('login'));
+        post('/login', {
+            onError: (e) => console.log(e),
+        });
     };
 
     return (
@@ -32,7 +36,7 @@ export default function Login({ status, canResetPassword }) {
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
-            <form onSubmit={submit}>
+            <form onSubmit={(e) => submit(e)}>
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
@@ -87,7 +91,7 @@ export default function Login({ status, canResetPassword }) {
                         </Link>
                     )}
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    <PrimaryButton button className="ms-4" disabled={processing}>
                         Log in
                     </PrimaryButton>
                 </div>

@@ -29,6 +29,7 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
+        // return dd('malah kesini');
         if ($user->id == Auth::id())
             return redirect(route('profile'));
 

@@ -8,7 +8,7 @@ import { AuthContext, UploadPostContext } from '@/Context/Context';
 import HorizontalScroll from '@/Layouts/HorizontalScroll';
 import Modal from '@/Components/Modal/Modal';
 
-export default function Home({ posts, users }) {
+const Home = ({ posts, users }) => {
     return (
         <div className="flex justify-center">
             <div className="max-w-[39rem] my-4 w-full">
@@ -43,7 +43,7 @@ function FeedLayout({ posts }) {
 
     const deletePost = (id) => {
         if (confirm("Are you sure want to delete this post? id=" + id)) {
-            destroy(`/posts/${id}`)
+            destroy(route('posts.destroy', id))
         }
 
     }
@@ -117,11 +117,11 @@ function FeedLayout({ posts }) {
                             </div>
                             <div className="p-4 flex-grow">
                                 <div className="flex">
-                                    <Link as='button' href={'/' + post.user.username}>
+                                    <Link as='button' href={route('posts.show', post.user.username)}>
                                         <Avatar avatar={post.user.avatar} className={'size-10 me-4'} avatarOnly />
                                     </Link>
                                     <div className="caption flex flex-col space-y-1 text-sm white mt-3 dark:text-white">
-                                        <span><Link as='button' href={'/' + post.user.username} className='me-1'><b>{post.user.username} </b></Link>
+                                        <span><Link as='button' href={route('posts.show', post.user.username)} className='me-1'><b>{post.user.username} </b></Link>
                                             {post.caption}</span>
                                         <div className="flex space-x-4 text-xs text-neutral-400">
                                             <span>1m</span>
@@ -158,12 +158,12 @@ function SideProfile({ users }) {
     return (
         <div className="px-4">
             <div className="flex items-center w-full">
-                <Link as='button' href={`/${auth.user.username}`}>
+                <Link as='button' href={route('profile')}>
                     <Avatar username={auth.user.username} avatarOnly className={'w-11'} />
                 </Link>
                 <div className="flex flex-col grow text-sm ms-3">
-                    <Link as='button' href={`/${auth.user.username}`} className='font-semibold text-left truncate w-36'>{auth.user.username}</Link>
-                    <Link as='button' href={`/${auth.user.username}`} className='text-gray-400 text-xs font-extralight text-left'>{auth.user.name}</Link>
+                    <Link as='button' href={route('profile')} className='font-semibold text-left truncate w-36'>{auth.user.username}</Link>
+                    <Link as='button' href={route('profile')} className='text-gray-400 text-xs font-extralight text-left'>{auth.user.name}</Link>
 
                 </div>
                 <Link as='button' role='button' className='text-xs text-red-500 hover:text-white' method='post' href={route('logout')}>Logout</Link>
@@ -175,11 +175,11 @@ function SideProfile({ users }) {
                     .map((user, i) => {
                         if (user.username != auth.user.username) {
                             return <div key={i} className="flex items-center w-full">
-                                <Link as='button' href={`/${user.username}`}>
+                                <Link as='button' href={route('profile.show', user.username)}>
                                     <Avatar username={user.username} avatarOnly className={'w-11'} />
                                 </Link>
                                 <div className="flex flex-col w-full text-sm ms-3">
-                                    <Link as='button' href={`/${user.username}`} className='font-semibold truncate w-36 text-left'>{user.username}</Link>
+                                    <Link as='button' href={route('profile.show', user.username)} className='font-semibold truncate w-36 text-left'>{user.username}</Link>
                                     <p className='text-gray-400 text-xs font-extralight'>Suggested for you</p>
                                 </div>
                                 <Link as='button' role='button' className='text-xs text-blue-500 hover:text-white'>Follow</Link>
@@ -190,3 +190,5 @@ function SideProfile({ users }) {
         </div>
     )
 }
+
+export default Home

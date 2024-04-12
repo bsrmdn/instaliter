@@ -14,7 +14,6 @@ class ReelsController extends Controller
      */
     public function index(): Response
     {
-        return dd('test');
         $posts = Post::all();
         return Inertia::render('Reels', [
             'posts' => $posts
