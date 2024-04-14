@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -13,7 +14,10 @@ class ExploreController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Explore');
+        $posts = Post::all();
+        return Inertia::render('Explore', [
+            'posts' => $posts
+        ]);
     }
 
     /**

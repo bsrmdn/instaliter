@@ -4,8 +4,8 @@ import React from 'react'
 function Reels({ posts }) {
     return (
         <div className="grid grid-cols-3 gap-4">
-            {posts.map(post => (
-                <div className="relative">
+            {posts.map((post, i) => (
+                <div key={i} className="relative">
                     <img className="object-cover w-full h-full" src={post.image} alt={post.caption} />
                     <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">
                         <div className="text-white">
@@ -22,7 +22,7 @@ function Reels({ posts }) {
     )
 }
 
-Reels.PageLayout = (page) => <PageLayout children={page} />
+Reels.layout = (page) => <PageLayout children={page} />
 
 export default Reels
 

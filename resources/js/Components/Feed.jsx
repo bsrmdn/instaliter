@@ -2,6 +2,8 @@ import React, { useContext } from 'react'
 import Avatar from './Avatar'
 import Dropdown from './Dropdown';
 import { AuthContext } from '@/Context/Context';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { Link } from '@inertiajs/react';
 
 
 const Feed = ({ children, className }) => {
@@ -19,13 +21,13 @@ const Header = ({ user, children }) => {
     const authUser = useContext(AuthContext)
     return (
         <div className="header py-4 flex justify-between items-center">
-            <div className="left flex flex-row items-center">
-                <Avatar avatar={user.avatar} className='w-10' avatarOnly />
+            <Link as='button' href={route('profile.show', user.username)} className="left flex flex-row items-center">
+                <Avatar avatar={user.avatar} className='size-10' avatarOnly />
                 <div className="user-name-and-place flex flex-col ms-4">
                     <span className="text-sm font-bold dark:text-white">{user.username}</span>
                     {/* <span className="text-xs font-light text-gray-900 dark:text-gray-50">Chiapas, Mexico</span> */}
                 </div>
-            </div>
+            </Link>
             <Dropdown>
                 <Dropdown.Trigger canOpen={authUser.user.username == user.username}>
                     <svg aria-label="More options" className="_8-yf5 fill-black dark:fill-white" height="16" viewBox="0 0 48 48" width="16">
@@ -54,10 +56,15 @@ const HeaderDropdown = ({ className = '', children, ...props }) => {
 
 
 
-const Image = ({ image, className }) => {
+const Image = ({ image, className, ...props }) => {
     return (
-        <div className={"feed-img flex rounded items-center dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 border " + className}>
-            <img src={'storage/' + image} alt="" />
+        <div {...props} className={"feed-img flex rounded items-center dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 border " + className}>
+            <LazyLoadImage src={'storage/' + image} alt="Post Image"
+                placeholder={
+                    <div className={"bg-neutral-700 animate-pulse grow " + className} />
+                }
+            />
+
         </div>
     );
 }
@@ -91,7 +98,7 @@ const ButtonInteractionsFeed = ({ children }) => {
     );
 }
 
-const Bottom = ({ className, children, name, caption, withCaption = true }) => {
+const Bottom = ({ className, children, name, caption, withCaption = true, commentRef }) => {
     return (
         <div className={"card-footer py-4 " + className}>
             <div className="top">
@@ -113,12 +120,9 @@ const Bottom = ({ className, children, name, caption, withCaption = true }) => {
                     </span>
                 </div>
             </div>
-            <div className="pt-3 mt-3">
-                <div className="wrapper flex">
-                    <input type="text" className="text-sm mt-0 block w-full px-0.5 border-0 focus:ring-0 bg-transparent" placeholder="Add a comment" />
-                    <button className="text-blue-500 opacity-75 w-2/12 text-right font-bold">post</button>
-                </div>
-
+            <div className="pt-3 mt-3 wrapper flex">
+                <input ref={commentRef} type="text" className="text-sm mt-0 block w-full px-0.5 border-0 focus:ring-0 bg-transparent" placeholder="Add a comment" />
+                <button className="text-blue-500 opacity-75 w-2/12 text-right font-bold">post</button>
             </div>
         </div>
     );

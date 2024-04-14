@@ -10,11 +10,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'Instaliter'
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: async name => {
-        const page = await resolvePageComponent(`./Pages/${name}.jsx`, import.meta.glob("./Pages/**/*.jsx", { eager: true }))
-        page.default.layout = page.default.layout || (page => <PageLayout children={page} />)
-        return page
-    },
+    resolve: name => resolvePageComponent(`./Pages/${name}.jsx`, import.meta.glob('./Pages/**/*.jsx', { eager: true })),
     // resolve: (name) => resolvePageComponent(`./Pages/${name}.jsx`, {
     //     const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true })
     //     let page = pages[`./Pages/${name}.jsx`]

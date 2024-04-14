@@ -13,7 +13,7 @@ function PageLayout({ children }) {
         <AuthContext.Provider value={auth}>
             <Head title={component.split('/')[0]} />
             <Navbar setIsUploading={setIsUploadingPost} />
-            <main className='ml-16 xl:ml-60 px-4 bg-gray-50 bg-opacity-5 dark:bg-black dark:text-white min-h-screen'>
+            <main className='md:ml-16 xl:ml-60 px-4 bg-gray-50 bg-opacity-5 dark:bg-black dark:text-white min-h-screen'>
                 <UploadPostContext.Provider value={isUploadingPost}>
                     {children}
                 </UploadPostContext.Provider>
