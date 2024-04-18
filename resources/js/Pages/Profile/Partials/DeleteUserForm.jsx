@@ -86,7 +86,10 @@ export default function DeleteUserForm({ className = '' }) {
                     </div>
 
                     <div className="mt-6 flex justify-end">
-                        <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
+                        <SecondaryButton onClick={(e) => {
+                            closeModal()
+                            e.preventDefault()
+                        }}>Cancel</SecondaryButton>
 
                         <DangerButton className="ms-3" disabled={processing}>
                             Delete Account

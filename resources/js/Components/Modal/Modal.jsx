@@ -11,7 +11,7 @@ export default function Modal({ show, children, maxWidth = '2xl', closeable = tr
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        setOpen(true)
+        setOpen(show)
     }, [show])
 
 

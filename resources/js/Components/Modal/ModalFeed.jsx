@@ -9,7 +9,7 @@ function ModalFeed(props) {
     const commentRef = useRef(null)
 
     return (
-        <Modal onClose={props.setOpenFeed} modalRef={props.modalRef} maxWidth='max-w-sm md:max-w-none max-h-none md:max-h-[calc(100vw-4rem)]'>
+        <Modal show={props.open} onClose={props.setOpenFeed} modalRef={props.modalRef} maxWidth='max-w-sm md:max-w-none max-h-none md:max-h-[calc(100vw-4rem)]'>
             <div className="flex flex-col md:flex-row max-h-[calc(100vh-8rem)]">
 
                 <div className="px-4 md:hidden block">

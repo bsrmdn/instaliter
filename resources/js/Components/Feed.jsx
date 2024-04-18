@@ -58,10 +58,11 @@ const HeaderDropdown = ({ className = '', children, ...props }) => {
 
 const Image = ({ image, className, ...props }) => {
     return (
-        <div {...props} className={"feed-img flex rounded items-center dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 border " + className}>
+        <div {...props} className={"feed-img flex rounded place-content-center dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 border " + className}>
             <LazyLoadImage src={'storage/' + image} alt="Post Image"
+                className='object-contain'
                 placeholder={
-                    <div className={"bg-neutral-700 animate-pulse grow " + className} />
+                    <div className={"bg-neutral-700 animate-pulse " + className} />
                 }
             />
 
@@ -74,7 +75,7 @@ const Image = ({ image, className, ...props }) => {
 
 const ButtonInteraction = ({ children, name, onClick }) => {
     return (
-        <button type='button' onClick={onClick} className="button-interaction">
+        <button type='button' onClick={onClick}>
             <svg aria-label={name} className='fill-black dark:fill-white' height="24" viewBox="0 0 48 48" width="24">
                 {children}
             </svg>
@@ -99,6 +100,7 @@ const ButtonInteractionsFeed = ({ children }) => {
 }
 
 const Bottom = ({ className, children, name, caption, withCaption = true, commentRef }) => {
+    
     return (
         <div className={"card-footer py-4 " + className}>
             <div className="top">

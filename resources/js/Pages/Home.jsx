@@ -42,7 +42,7 @@ function FeedLayout({ posts }) {
 
 
     const deletePost = (id) => {
-        if (confirm("Are you sure want to delete this post? id=" + id)) {
+        if (confirm("Are you sure want to delete this post?")) {
             destroy(route('posts.destroy', id))
         }
 
@@ -104,8 +104,8 @@ function FeedLayout({ posts }) {
                 :
                 <p>no post</p>
             }
-            {openEdit && <ModalEdit setOpen={setOpenEdit} post={post} />}
-            {openFeed && <ModalFeed setOpenFeed={setOpenFeed} post={post} modalRef={modalRef} />}
+            {openEdit && <ModalEdit open={openEdit} setOpen={setOpenEdit} post={post} />}
+            {openFeed && <ModalFeed open={openFeed} setOpenFeed={setOpenFeed} post={post} modalRef={modalRef} />}
         </div>
     )
 

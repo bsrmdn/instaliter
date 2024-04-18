@@ -1,5 +1,5 @@
 import { Switch } from '@headlessui/react'
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import NavIcon from '../Components/NavButton'
 import { AuthContext } from '@/Context/Context'
 import Avatar from '../Components/Avatar'
@@ -7,20 +7,20 @@ import ModalCreate from '../Components/Modal/ModalCreate'
 
 function Navbar({ setIsUploading = () => { } }) {
     const [darkMode, setDarkMode] = useState(document.documentElement.classList.contains('dark'))
-    darkMode ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark")
+    useEffect(() => {
+        darkMode ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark")
+    }, [darkMode])
 
     const [showModal, setShowModal] = useState(false)
     const auth = useContext(AuthContext)
 
-
-
     return (
-        <div className="fixed bottom-0 flex md:flex-col justify-items-start border-t border-e md:h-screen w-screen md:w-16 xl:w-60 p-2 xl:p-4 dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 bg-clip-border bg-white dark:bg-black text-gray-700 dark:text-white">
+        <div className="fixed bottom-0 z-50 flex md:flex-col justify-items-start border-t border-e md:h-screen w-screen md:w-16 xl:w-60 p-2 xl:p-4 dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 bg-clip-border bg-white dark:bg-black text-gray-700 dark:text-white">
             <div className="mb-6 py-4 px-2">
                 <p className="hidden xl:block antialiased tracking-normal font-serif text-2xl font-semibold leading-snug text-gray-900 dark:text-white">Instaliter</p>
             </div>
 
-            <nav className="flex md:flex-col gap-10 md:gap-3 w-full md:h-full font-sans text-base font-medium text-gray-700 dark:text-white">
+            <nav className="flex md:flex-col md:gap-3 w-full md:h-full font-sans text-base font-medium text-gray-700 dark:text-white">
                 <NavIcon name="Home" to='home'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth={1.5} stroke="currentColor" className="w-7">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
@@ -50,7 +50,7 @@ function Navbar({ setIsUploading = () => { } }) {
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth={1.5} stroke="currentColor" className="w-7">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    {showModal && <ModalCreate setOpen={setShowModal} setIsUploading={setIsUploading} user={auth.user}></ModalCreate>}
+                    {showModal && <ModalCreate open={showModal} setOpen={setShowModal} setIsUploading={setIsUploading} user={auth.user}></ModalCreate>}
                 </NavIcon>
                 <NavIcon name="Profile" to='profile'>
                     <Avatar className={'w-7'} avatarOnly avatar={auth.user.avatar} />

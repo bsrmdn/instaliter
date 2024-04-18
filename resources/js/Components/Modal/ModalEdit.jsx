@@ -42,15 +42,18 @@ function ModalEdit({ post, open, setOpen }) {
 
     function handleSubmit(e) {
         e.preventDefault()
-        router.post(`posts/${post.id}`, {
+        router.post(route('posts.update', post.id), {
             _method: 'patch',
             image: data.image,
             caption: data.caption,
-            preserveScroll: true
+        }, {
+            preserveScroll: true,
+            preserveState: true,
         })
         setOpen(false)
         reset()
     }
+
     function onDropHandler(e) {
         e.preventDefault()
         setData('image', e.dataTransfer.files[0])
@@ -78,19 +81,19 @@ function ModalEdit({ post, open, setOpen }) {
                     <button type='submit' disabled={processing} className='text-blue-500 hover:dark:text-white hover:text-black text-sm font-bold'>Edit</button>
                 </div>
                 <div className="flex grow dark:text-white">
-                    <div className="flex flex-col w-7/12 p-4 grow items-center justify-center border-e dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15">
+                    <div className="flex flex-col max-h-[70vh] w-7/12 p-4 grow items-center justify-center border-e dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15">
                         <input id="hidden-input" type="file" className="hidden" onChange={e => setData('image', e.target.files[0])} />
                         {fileDataURL ?
                             <>
                                 <button type='button' className='flex self-end' onClick={() => reset("image")}>x</button>
-                                <img src={fileDataURL} className='w-fulll' />
+                                <img src={fileDataURL} className='max-h-[80%]' />
                             </>
                             :
                             <>
-                                <img src={`storage/${post && post.image}`} />
+                                <img src={`storage/${post && post.image}`} className='max-h-[80%]' />
                                 <div className="text-center">
                                     <p>Change Image by drop file image here or</p>
-                                    <PrimaryButton type='button' onClick={() => document.getElementById("hidden-input").click()}>
+                                    <PrimaryButton type='button' onClick={(e) => document.getElementById("hidden-input").click(e.preventDefault())}>
                                         Add from computer
                                     </PrimaryButton>
                                 </div>

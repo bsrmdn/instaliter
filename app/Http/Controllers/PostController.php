@@ -15,8 +15,8 @@ class PostController extends Controller
     public function index()
     {
         return Inertia::render('Home', [
-            'posts' => Post::all(),
-            'users' => User::all(['name', 'username'])
+            'posts' => fn () => Post::all(),
+            'users' => fn () => User::all(['name', 'username'])
         ]);
     }
 
@@ -46,8 +46,7 @@ class PostController extends Controller
         $validatedData['user_id'] = auth()->user()->id;
 
         Post::create($validatedData);
-
-        return back();
+        return back()->with(['message' => 'Create post successfully!']);
     }
 
     /**
@@ -89,6 +88,7 @@ class PostController extends Controller
         // return dd($validatedData);
 
         Post::where('id', $post->id)->update($validatedData);
+        return back()->with(['message' => 'Update post successfully!']);
     }
 
     /**
@@ -97,6 +97,6 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        // return redirect()->back();
+        return back()->with(['message' => 'Delete post successfully!']);
     }
 }

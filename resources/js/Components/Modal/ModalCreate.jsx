@@ -1,12 +1,12 @@
 import { Dialog } from '@headlessui/react'
 import PrimaryButton from '../PrimaryButton'
 import Avatar from '../Avatar'
-import { useForm } from '@inertiajs/react'
+import { router, useForm } from '@inertiajs/react'
 import Modal from './Modal'
 import { useEffect, useRef, useState } from 'react'
 import InputError from '../InputError'
 
-export default function ModalCreate({ open, setOpen, user }) {
+export default function ModalCreate({ open, setOpen, user, setIsUploading = () => { } }) {
     const { data, setData, post, errors, reset, progress, processing } = useForm({
         image: null,
         caption: null,
@@ -36,12 +36,28 @@ export default function ModalCreate({ open, setOpen, user }) {
             }
         }
 
-    }, [data.image]);
+    }, [data.image])
+
+    useEffect(() => {
+        if (open) reset()
+    }, [open])
 
 
     function handleSubmit(e) {
         e.preventDefault()
-        post(route('posts.store'), data)
+        post(route('posts.store', data), {
+            preserveState: true,
+            preserveScroll: true,
+            onBefore: () => setIsUploading(true),
+            onSuccess: () => {
+                router.reload({
+                    // preserveState: true,
+                    // preserveScroll: true,
+                    only: ['posts'],
+                })
+            },
+            onFinish: () => setIsUploading(false),
+        })
         setOpen(false)
     }
     function onDropHandler(e) {
@@ -57,10 +73,7 @@ export default function ModalCreate({ open, setOpen, user }) {
                     <button
                         type="button"
                         className="inline-flex self-center justify-center dark:text-white"
-                        onClick={() => {
-                            setOpen(false)
-                            reset()
-                        }}
+                        onClick={() => setOpen(false)}
                         ref={modalRef}
                     >
                         X
@@ -72,17 +85,17 @@ export default function ModalCreate({ open, setOpen, user }) {
                     <button type='submit' disabled={processing} className='text-blue-500 hover:dark:text-white hover:text-black text-sm font-bold'>Share</button>
                 </div>
                 <div className="flex grow dark:text-white">
-                    <div className="flex flex-col w-7/12 p-4 grow items-center justify-center border-e dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15">
+                    <div className="flex object-contain flex-col w-7/12 p-4 grow items-center justify-center border-e dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15">
                         <input id="hidden-input" type="file" className="hidden" onChange={e => setData('image', e.target.files[0])} />
                         {fileDataURL ?
                             <>
                                 <button type='button' className='flex self-end' onClick={() => reset("image")}>x</button>
-                                <img src={fileDataURL} className='w-fulll' />
+                                <img src={fileDataURL} className='w-full' />
                             </>
                             :
                             <>
                                 <p>Drop file image here or</p>
-                                <PrimaryButton type='button' onClick={() => document.getElementById("hidden-input").click()}>
+                                <PrimaryButton type='button' onClick={(e) => document.getElementById("hidden-input").click(e.preventDefault())}>
                                     Add image from computer
                                 </PrimaryButton>
                             </>
