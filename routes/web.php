@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReelsController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ExploreController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -56,6 +57,8 @@ Route::middleware('auth')->group(function () {
 
     // Route::post('/posts', [PostController::class, 'store'])->name('post.store');
     Route::resource('posts', PostController::class);
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
     Route::get('/reels', [ReelsController::class, 'index'])->name('reels');

@@ -50,11 +50,7 @@ export default function ModalCreate({ open, setOpen, user, setIsUploading = () =
             preserveScroll: true,
             onBefore: () => setIsUploading(true),
             onSuccess: () => {
-                router.reload({
-                    // preserveState: true,
-                    // preserveScroll: true,
-                    only: ['posts'],
-                })
+                router.reload()
             },
             onFinish: () => setIsUploading(false),
         })
@@ -105,8 +101,7 @@ export default function ModalCreate({ open, setOpen, user, setIsUploading = () =
                     <div className="w-5/12 px-4">
 
                         <div className="my-4 flex items-center">
-                            <Avatar className={`w-9 me-3`} avatarOnly>
-                            </Avatar>
+                            <Avatar avatar={user.avatar} className={`w-9 me-3`} avatarOnly />
                             <div className="text-sm">
                                 {user.name}
                             </div>

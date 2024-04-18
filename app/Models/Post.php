@@ -10,7 +10,7 @@ class Post extends Model
     use HasFactory;
 
     protected $guarded = ['user'];
-    protected $with = ['user'];
+    protected $with = ['user', 'comments'];
 
     public function user()
     {

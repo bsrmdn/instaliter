@@ -25,6 +25,7 @@ class UserFactory extends Factory
     {
         $name = fake()->name();
         return [
+            'avatar' => 'avatars/default-profile.jpg',
             'name' => $name,
             'username' => Str::of($name)->snake()->lower(),
             'email' => fake()->unique()->safeEmail(),

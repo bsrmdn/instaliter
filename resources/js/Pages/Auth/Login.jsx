@@ -21,8 +21,6 @@ export default function Login({ status, canResetPassword }) {
     }, []);
 
     const submit = (e) => {
-        console.log('e: ', e);
-
         e.preventDefault();
 
         post('/login', {

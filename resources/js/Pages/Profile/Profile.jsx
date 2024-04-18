@@ -14,7 +14,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component'
 function Profile({ user, posts }) {
     return (
         <div className="mx-auto pt-8 max-w-5xl">
-            <Header user={user} length={posts.length} />
+            <Header user={user} postLength={posts.length} />
             <TabContent />
             <Posts posts={posts} />
         </div>
@@ -70,7 +70,7 @@ function Header(props) {
                         <HeaderOptions user={props.user} />
                     </div>
                     <ul className="flex gap-10">
-                        <li><span className='font-bold'>{props.length}</span> posts</li>
+                        <li><span className='font-bold'>{props.postLength}</span> posts</li>
                         <li><span className='font-bold'>0</span> followers</li>
                         <li><span className='font-bold'>0</span> following</li>
                     </ul>
@@ -140,16 +140,21 @@ function TabContent() {
 }
 
 //MARK:Post
-function Posts(props) {
+function Posts({ posts }) {
     const [open, setOpen] = useState(false)
     const [post, setPost] = useState(null)
+
+    useEffect(() => {
+        if (posts.length > 0 && post !== null) setPost(posts.find(item => item.id === post.id))
+    }, [posts])
+
     const modalRef = useRef(null)
 
     return (
         <div className="grid grid-cols-3 gap-1">
-            {props.posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((post, i) => {
+            {posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(post => {
                 return (
-                    <button key={i} className="relative aspect-square group" onClick={() => {
+                    <button key={post.id} className="relative aspect-square group" onClick={() => {
                         setPost(post)
                         setOpen(true)
                     }}>

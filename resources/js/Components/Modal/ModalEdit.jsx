@@ -104,8 +104,7 @@ function ModalEdit({ post, open, setOpen }) {
                     <div className="w-5/12 px-4">
 
                         <div className="my-4 flex items-center">
-                            <Avatar className={`w-9 me-3`} avatarOnly>
-                            </Avatar>
+                            <Avatar avatar={post && post.user.avatar} className={`w-9 me-3`} avatarOnly />
                             <div className="text-sm">
                                 {post && post.user.name}
                             </div>

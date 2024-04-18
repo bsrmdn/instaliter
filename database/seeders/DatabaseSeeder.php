@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
 
         User::factory()->create([
+            'avatar' => 'avatars/default-profile.jpg',
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => 'admin'

@@ -3,7 +3,7 @@ import Avatar from '@/Components/Avatar'
 import Feed from '@/Components/Feed'
 import ModalEdit from '@/Components/Modal/ModalEdit'
 import { Link, useForm } from '@inertiajs/react';
-import React, { useContext, useRef, useState, useTransition } from 'react'
+import React, { useContext, useEffect, useRef, useState, useTransition } from 'react'
 import { AuthContext, UploadPostContext } from '@/Context/Context';
 import HorizontalScroll from '@/Layouts/HorizontalScroll';
 import ModalFeed from '@/Components/Modal/ModalFeed';
@@ -14,7 +14,7 @@ const Home = ({ posts, users }) => {
             <div className="max-w-[39rem] my-4 w-full">
                 <HorizontalScroll>
                     {users.map((user, i) => {
-                        return <Avatar key={i} className='w-16 h-24' username={user.username} hasStory />
+                        return <Avatar key={i} avatar={user.avatar} className='w-16 h-24' username={user.username} hasStory />
                     })}
                 </HorizontalScroll>
                 <FeedLayout posts={posts} />
@@ -36,6 +36,11 @@ function FeedLayout({ posts }) {
     const [openEdit, setOpenEdit] = useState(false)
     const [openFeed, setOpenFeed] = useState(false)
     const [post, setPost] = useState(null)
+
+    useEffect(() => {
+        if (posts.length > 0 && post !== null) setPost(posts.find(item => item.id === post.id))
+    }, [posts])
+
     const modalRef = useRef(null)
 
     const [isPending, startTransition] = useTransition()
@@ -51,16 +56,16 @@ function FeedLayout({ posts }) {
         <div className="flex flex-col items-center mt-4 ">
             {isUploading &&
                 <Feed className={'max-w-[29rem] border-b dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15 py-5'}>
-                    <div class="animate-pulse flex space-x-4">
-                        <div class="rounded-full bg-neutral-300 dark:bg-neutral-800 size-10"></div>
-                        <div class="flex-1 space-y-6 py-1">
-                            <div class="h-2 text-neutral-300 dark:text-neutral-800 rounded">Uploading...</div>
-                            <div class="space-y-3">
-                                <div class="grid grid-cols-3 gap-4">
-                                    <div class="h-2 bg-neutral-300 dark:bg-neutral-800 rounded col-span-2"></div>
-                                    <div class="h-2 bg-neutral-300 dark:bg-neutral-800 rounded col-span-1"></div>
+                    <div className="animate-pulse flex space-x-4">
+                        <div className="rounded-full bg-neutral-300 dark:bg-neutral-800 size-10"></div>
+                        <div className="flex-1 space-y-6 py-1">
+                            <div className="h-2 text-neutral-300 dark:text-neutral-800 rounded">Uploading...</div>
+                            <div className="space-y-3">
+                                <div className="grid grid-cols-3 gap-4">
+                                    <div className="h-2 bg-neutral-300 dark:bg-neutral-800 rounded col-span-2"></div>
+                                    <div className="h-2 bg-neutral-300 dark:bg-neutral-800 rounded col-span-1"></div>
                                 </div>
-                                <div class="h-2 bg-neutral-300 dark:bg-neutral-800 rounded"></div>
+                                <div className="h-2 bg-neutral-300 dark:bg-neutral-800 rounded"></div>
                             </div>
                         </div>
                     </div>
@@ -68,9 +73,9 @@ function FeedLayout({ posts }) {
             }
 
             {posts.length > 0 ?
-                posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((post, i) => {
+                posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(post => {
                     return (
-                        <Feed key={i} className={'max-w-[29rem] border-b dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15'}>
+                        <Feed key={post.id} className={'max-w-[29rem] border-b dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15'}>
                             <Feed.Header user={post.user}>
                                 <Feed.HeaderDropdown children={"Update Post"} onClick={() => startTransition(() => {
                                     setPost(post)
@@ -82,7 +87,7 @@ function FeedLayout({ posts }) {
                                 setPost(post)
                                 setOpenFeed(true)
                             })} />
-                            <Feed.Bottom name={post.user.username} caption={post.caption}>
+                            <Feed.Bottom name={post.user.username} postId={post.id} caption={post.caption}>
                                 <Feed.ButtonInteractionsFeed>
                                     <Feed.ButtonInteraction name='Like'>
                                         <path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
@@ -102,7 +107,7 @@ function FeedLayout({ posts }) {
                     )
                 })
                 :
-                <p>no post</p>
+                !isUploading && <p>no post</p>
             }
             {openEdit && <ModalEdit open={openEdit} setOpen={setOpenEdit} post={post} />}
             {openFeed && <ModalFeed open={openFeed} setOpenFeed={setOpenFeed} post={post} modalRef={modalRef} />}
@@ -118,7 +123,7 @@ function SideProfile({ users }) {
         <div className="px-4">
             <div className="flex items-center w-full">
                 <Link as='button' href={route('profile')}>
-                    <Avatar username={auth.user.username} avatarOnly className={'size-11'} />
+                    <Avatar avatar={auth.user.avatar} username={auth.user.username} avatarOnly className={'size-11'} />
                 </Link>
                 <div className="flex flex-col grow text-sm ms-3">
                     <Link as='button' href={route('profile')} className='font-semibold text-left truncate w-36'>{auth.user.username}</Link>
@@ -135,7 +140,7 @@ function SideProfile({ users }) {
                         if (user.username != auth.user.username) {
                             return <div key={i} className="flex items-center w-full">
                                 <Link as='button' href={route('profile.show', user.username)}>
-                                    <Avatar username={user.username} avatarOnly className={'size-11'} />
+                                    <Avatar avatar={user.avatar} username={user.username} avatarOnly className={'size-11'} />
                                 </Link>
                                 <div className="flex flex-col w-full text-sm ms-3">
                                     <Link as='button' href={route('profile.show', user.username)} className='font-semibold truncate w-36 text-left'>{user.username}</Link>

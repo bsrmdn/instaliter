@@ -9,7 +9,7 @@ function Avatar({ className, hasStory = false, avatarOnly = false, avatar, usern
                 <div className={`${hasStory ? `p-[2px] bg-white dark:bg-black rounded-full` : ''} aspect-square`}>
                     <LazyLoadImage
                         alt="avatar"
-                        src={`/storage/${avatar ? avatar : 'avatar/default-profile.jpg'}`}
+                        src={`/storage/${avatar ? avatar : 'avatars/default-profile.jpg'}`}
                         className="size-full rounded-full dark:border-black border-white object-cover object-center"
                         placeholder={
                             <div className="rounded-full bg-neutral-700 size-full animate-pulse" />

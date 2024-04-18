@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
+import React, { useContext, useRef } from 'react'
 import Avatar from './Avatar'
 import Dropdown from './Dropdown';
 import { AuthContext } from '@/Context/Context';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { Link } from '@inertiajs/react';
+import { Link, router, useForm } from '@inertiajs/react';
 
 
 const Feed = ({ children, className }) => {
@@ -99,8 +99,34 @@ const ButtonInteractionsFeed = ({ children }) => {
     );
 }
 
-const Bottom = ({ className, children, name, caption, withCaption = true, commentRef }) => {
-    
+const Bottom = ({ className, children, postId, name, caption, withCaption = true }) => {
+    const commentRef = useRef(null)
+    const { data, setData, post, reset, processing } = useForm({
+        comment: "",
+    });
+
+    const handleCommentChange = (e) => {
+        setData("comment", e.target.value);
+    }
+
+    const handleCommentSubmit = (e) => {
+        e.preventDefault();
+
+        if (data.comment.trim() !== "") {
+            post(route('comments.store', [postId, data]), {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    reset()
+                    router.reload({
+                        only: ['posts.comments']
+                    })
+                    commentRef.current.value = ''
+                }
+            });
+        }
+    }
+
     return (
         <div className={"card-footer py-4 " + className}>
             <div className="top">
@@ -122,10 +148,10 @@ const Bottom = ({ className, children, name, caption, withCaption = true, commen
                     </span>
                 </div>
             </div>
-            <div className="pt-3 mt-3 wrapper flex">
-                <input ref={commentRef} type="text" className="text-sm mt-0 block w-full px-0.5 border-0 focus:ring-0 bg-transparent" placeholder="Add a comment" />
-                <button className="text-blue-500 opacity-75 w-2/12 text-right font-bold">post</button>
-            </div>
+            <form className="pt-3 mt-3 wrapper flex" onSubmit={handleCommentSubmit}>
+                <input ref={commentRef} onChange={handleCommentChange} type="text" className="text-sm mt-0 block w-full px-0.5 border-0 focus:ring-0 bg-transparent" placeholder="Add a comment" />
+                <button type='submit' disabled={processing} className="text-blue-500 hover:text-blue-600 disabled:opacity-50 w-2/12 text-right font-bold">post</button>
+            </form>
         </div>
     );
 }
