@@ -2,8 +2,9 @@ import { Dialog } from '@headlessui/react'
 import PrimaryButton from '../PrimaryButton'
 import Avatar from '../Avatar'
 import { router, useForm } from '@inertiajs/react'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import Modal from './Modal'
+import useFileReader from '@/Hooks/useFileReader'
 
 
 function ModalEdit({ post, open, setOpen }) {
@@ -12,33 +13,8 @@ function ModalEdit({ post, open, setOpen }) {
         image: null,
         caption: null,
     })
-    const [fileDataURL, setFileDataURL] = useState(null);
     const modalRef = useRef(null)
-
-
-    useEffect(() => {
-        let fileReader, isCancel = false;
-        if (data.image) {
-            fileReader = new FileReader();
-            fileReader.onload = (e) => {
-                const { result } = e.target;
-                if (result && !isCancel) {
-                    setFileDataURL(result)
-                }
-            }
-            fileReader.readAsDataURL(data.image);
-        } else {
-            setFileDataURL(null)
-        }
-        return () => {
-            isCancel = true;
-            if (fileReader && fileReader.readyState === 1) {
-                fileReader.abort();
-            }
-        }
-
-    }, [data.image]);
-
+    const fileDataURL = useFileReader(data.image)
 
     function handleSubmit(e) {
         e.preventDefault()

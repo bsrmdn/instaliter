@@ -129,7 +129,7 @@ const Bottom = ({ className, children, postId, name, caption, withCaption = true
 
     return (
         <div className={"card-footer py-4 " + className}>
-            <div className="top">
+            <div className="top break-all">
                 {children}
                 <div className="likes mt-1">
                     <span className="font-bold text-sm">

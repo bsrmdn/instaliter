@@ -7,7 +7,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Dropdown from '../Dropdown'
 import { AuthContext } from '@/Context/Context'
 
-function ModalFeed({ open, setOpenFeed, modalRef, post }) {
+function ModalFeed({ open, setOpenFeed = () => { }, setOpenEdit, modalRef, post }) {
     const [comments, setComments] = useState(post.comments)
 
     useEffect(() => {
@@ -19,12 +19,24 @@ function ModalFeed({ open, setOpenFeed, modalRef, post }) {
             <div className="flex flex-col md:flex-row max-h-[calc(100vh-8rem)]">
 
                 <div className="px-4 md:hidden block">
-                    <Feed.Header user={post.user} />
+                    <Feed.Header user={post.user} >
+                        <Feed.HeaderDropdown children={"Update Post"} className='dark:text-white' onClick={() => {
+                            setOpenFeed(false)
+                            setOpenEdit(true)
+                        }} />
+                        <Feed.HeaderDropdown children={"Delete Post"} onClick={() => deletePost(post.id)} className='text-red-500' />
+                    </Feed.Header>
                 </div>
                 <FeedImage image={post.image} />
                 <div className="flex flex-col md:w-[25rem] w-full divide-y dark:divide-neutral-800 divide-neutral-200">
                     <div className="px-4 hidden md:block">
-                        <Feed.Header user={post.user} />
+                        <Feed.Header user={post.user}>
+                            <Feed.HeaderDropdown children={"Update Post"} className='dark:text-white' onClick={() => {
+                                setOpenFeed(false)
+                                setOpenEdit(true)
+                            }} />
+                            <Feed.HeaderDropdown children={"Delete Post"} onClick={() => deletePost(post.id)} className='text-red-500' />
+                        </Feed.Header>
                     </div>
                     <div className="p-4 flex-grow hidden overflow-y-scroll no-scrollbar md:block">
                         <CaptionSection user={post.user} caption={post.caption} />
@@ -67,7 +79,7 @@ function CaptionSection({ user, caption }) {
                 <Avatar avatar={user.avatar} className={'size-10 me-4'} avatarOnly />
             </Link>
             <div className="flex flex-col space-y-1 text-sm white mt-3 dark:text-white">
-                <span><Link as='button' href={route('profile.show', user.username)} className='me-1'><b>{user.username} </b></Link>
+                <span className='break-all'><Link as='button' href={route('profile.show', user.username)} className='me-1'><b>{user.username} </b></Link>
                     {caption}</span>
                 <div className="flex space-x-4 text-xs text-neutral-400">
                     <span>1m</span>

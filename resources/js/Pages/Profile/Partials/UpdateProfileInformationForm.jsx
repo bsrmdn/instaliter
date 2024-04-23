@@ -8,10 +8,33 @@ import { Transition } from '@headlessui/react';
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
     const user = usePage().props.auth.user;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, patch, errors, setError, clearErrors, processing, recentlySuccessful } = useForm({
+        username: user.username,
         name: user.name,
         email: user.email,
     });
+
+    const usernameHandler = (e) => {
+        const isLowerCase = (str) => str === str.toLowerCase() && str !== str.toUpperCase()
+        const hasWhiteSpace = (str) => str.indexOf(' ') >= 0
+
+        const regex = /[^a-zA-Z0-9_.]/g
+
+        if (!isLowerCase(e.target.value) && e.target.value != '') {
+            setError('username', 'username must be lowercase')
+            setData('username', e.target.value.toLowerCase())
+
+        } else if (regex.test(e.target.value)) {
+            setError('username', 'username must be only contain alphanumeric code, ., _')
+            setData('username', e.target.value.replace(regex, ''))
+        } else if (hasWhiteSpace(e.target.value)) {
+            setError('username', 'username cannot contain space')
+            setData('username', e.target.value.trim())
+        } else {
+            clearErrors('username')
+            setData('username', e.target.value)
+        }
+    }
 
     const submit = (e) => {
         e.preventDefault();
@@ -30,6 +53,22 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
+                <div>
+                    <InputLabel htmlFor="username" value="Username" />
+
+                    <TextInput
+                        id="username"
+                        className="mt-1 block w-full"
+                        value={data.username}
+                        onChange={(e) => usernameHandler(e)}
+                        required
+                        isFocused
+                        autoComplete="username"
+                    />
+
+                    <InputError className="mt-2" message={errors.username} />
+                </div>
+
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
 
@@ -85,7 +124,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 )}
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton button disabled={processing}>Save</PrimaryButton>
+                    <PrimaryButton button type='submit' disabled={processing}>Save</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}

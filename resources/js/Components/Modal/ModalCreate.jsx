@@ -3,40 +3,17 @@ import PrimaryButton from '../PrimaryButton'
 import Avatar from '../Avatar'
 import { router, useForm } from '@inertiajs/react'
 import Modal from './Modal'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import InputError from '../InputError'
+import useFileReader from '@/Hooks/useFileReader'
 
 export default function ModalCreate({ open, setOpen, user, setIsUploading = () => { } }) {
     const { data, setData, post, errors, reset, progress, processing } = useForm({
         image: null,
         caption: null,
     })
-    const [fileDataURL, setFileDataURL] = useState(null);
     const modalRef = useRef(null)
-
-
-    useEffect(() => {
-        let fileReader, isCancel = false;
-        if (data.image) {
-            fileReader = new FileReader();
-            fileReader.onload = (e) => {
-                const { result } = e.target;
-                if (result && !isCancel) {
-                    setFileDataURL(result)
-                }
-            }
-            fileReader.readAsDataURL(data.image);
-        } else {
-            setFileDataURL(null)
-        }
-        return () => {
-            isCancel = true;
-            if (fileReader && fileReader.readyState === 1) {
-                fileReader.abort();
-            }
-        }
-
-    }, [data.image])
+    const fileDataURL = useFileReader(data.image)
 
     useEffect(() => {
         if (open) reset()

@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -29,7 +30,6 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        // return dd('malah kesini');
         if ($user->id == Auth::id())
             return redirect(route('profile'));
 
@@ -62,6 +62,28 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+
+        return Redirect::route('profile.edit');
+    }
+
+    public function update_avatar(Request $request)
+    {
+        if ($request->user()->avatar != 'avatars/default-profile.jpg')
+            Storage::delete($request->user()->avatar);
+
+        $request->user()->fill(['avatar' => $request->file('avatar')->store('avatars')]);
+        $request->user()->save();
+
+        return Redirect::route('profile.edit');
+    }
+
+    public function destroy_avatar(Request $request)
+    {
+        if ($request->user()->avatar != 'avatars/default-profile.jpg') {
+            Storage::delete($request->user()->avatar);
+            $request->user()->fill(['avatar' => 'avatars/default-profile.jpg']);
+            $request->user()->save();
+        }
 
         return Redirect::route('profile.edit');
     }

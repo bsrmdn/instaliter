@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class PostController extends Controller
@@ -75,9 +76,10 @@ class PostController extends Controller
             'caption' => 'nullable|string'
         ]);
 
-        if ($request->file('image'))
+        if ($request->file('image')) {
+            Storage::delete($post->image);
             $validatedData['image'] = $request->file('image')->store('post-images');
-        else
+        } else
             $validatedData['image'] = $post->image;
 
 
@@ -96,6 +98,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        Storage::delete($post->image);
         $post->delete();
         return back()->with(['message' => 'Delete post successfully!']);
     }

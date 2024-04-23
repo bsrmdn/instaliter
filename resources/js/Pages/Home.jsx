@@ -28,6 +28,7 @@ const Home = ({ posts, users }) => {
 
 Home.layout = page => <PageLayout children={page} />
 
+//MARK: Feeds
 function FeedLayout({ posts }) {
     const { delete: destroy } = useForm({})
 
@@ -110,12 +111,13 @@ function FeedLayout({ posts }) {
                 !isUploading && <p>no post</p>
             }
             {openEdit && <ModalEdit open={openEdit} setOpen={setOpenEdit} post={post} />}
-            {openFeed && <ModalFeed open={openFeed} setOpenFeed={setOpenFeed} post={post} modalRef={modalRef} />}
+            {openFeed && <ModalFeed open={openFeed} setOpenFeed={setOpenFeed} setOpenEdit={setOpenEdit} post={post} modalRef={modalRef} />}
         </div>
     )
 
 }
 
+//MARK: Right Side
 function SideProfile({ users }) {
     const auth = useContext(AuthContext)
 

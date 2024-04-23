@@ -12,8 +12,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-
-
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 // Route::get('/dashboard', function () {
 //     return Inertia::render('Dashboard');
@@ -53,10 +52,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/{user:username}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/avatar', [ProfileController::class, 'update_avatar'])->name('profile.avatar.update');
+    Route::delete('/profile/avatar', [ProfileController::class, 'destroy_avatar'])->name('profile.avatar.destroy');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Route::post('/posts', [PostController::class, 'store'])->name('post.store');
-    Route::resource('posts', PostController::class);
+    Route::apiResource('posts', PostController::class);
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
