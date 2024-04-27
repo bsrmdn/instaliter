@@ -142,7 +142,7 @@ export default function Register() {
                         Already registered?
                     </Link>
 
-                    <PrimaryButton button className="ms-4" disabled={processing}>
+                    <PrimaryButton button type='submit' className="ms-4" disabled={processing}>
                         Register
                     </PrimaryButton>
                 </div>

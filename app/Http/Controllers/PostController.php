@@ -17,7 +17,7 @@ class PostController extends Controller
     {
         return Inertia::render('Home', [
             'posts' => fn () => Post::all(),
-            'users' => fn () => User::all(['name', 'username'])
+            'users' => fn () => User::all(['avatar', 'name', 'username'])
         ]);
     }
 
