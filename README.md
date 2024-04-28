@@ -33,6 +33,9 @@
         <img src="./src/light-mode.png">
         <img src="./src/home-page.png">
     </li>
+    <li>
+        Like post
+    </li>
 </ul>
 
 
@@ -69,7 +72,6 @@ DB_PASSWORD=
 Now migrate your DB
 ```
 php artisan migrate
-
 ```
 
 Now run this command to start the project 

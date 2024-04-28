@@ -3,16 +3,17 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReelsController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ExploreController;
 use App\Http\Controllers\ProfileController;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use Symfony\Component\HttpKernel\Profiler\Profile;
 
 // Route::get('/dashboard', function () {
 //     return Inertia::render('Dashboard');
@@ -60,6 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::apiResource('posts', PostController::class);
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::post('/posts/{post}/likes', [LikeController::class, 'likePost'])->name('posts.likes');
 
     Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
     Route::get('/reels', [ReelsController::class, 'index'])->name('reels');

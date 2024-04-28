@@ -2,7 +2,7 @@ import PageLayout from '@/Layouts/PageLayout'
 import Avatar from '@/Components/Avatar'
 import Feed from '@/Components/Feed'
 import ModalEdit from '@/Components/Modal/ModalEdit'
-import { Link, useForm } from '@inertiajs/react';
+import { Link, useForm, usePage } from '@inertiajs/react';
 import React, { useContext, useEffect, useRef, useState, useTransition } from 'react'
 import { AuthContext, UploadPostContext } from '@/Context/Context';
 import HorizontalScroll from '@/Layouts/HorizontalScroll';
@@ -30,6 +30,8 @@ Home.layout = page => <PageLayout children={page} />
 
 //MARK: Feeds
 function FeedLayout({ posts }) {
+    console.log('posts: ', posts);
+    const auth = usePage().props.auth
     const { delete: destroy } = useForm({})
 
     const isUploading = useContext(UploadPostContext)
@@ -90,9 +92,9 @@ function FeedLayout({ posts }) {
                                 setPost(post)
                                 setOpenFeed(true)
                             })} />
-                            <Feed.Bottom name={post.user.username} postId={post.id} caption={post.caption}>
+                            <Feed.Bottom name={post.user.username} post={post} caption={post.caption}>
                                 <Feed.ButtonInteractionsFeed>
-                                    <Feed.LikeButton />
+                                    <Feed.LikeButton postId={post.id} isLiked={post.likes.find(like => like.user_id == auth.user.id)} />
                                     <Feed.ButtonInteraction name='Comment' onClick={() => startTransition(() => {
                                         setPost(post)
                                         setOpenFeed(true)

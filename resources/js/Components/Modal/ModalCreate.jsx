@@ -8,7 +8,7 @@ import InputError from '../InputError'
 import useFileReader from '@/Hooks/useFileReader'
 
 export default function ModalCreate({ open, setOpen, user, setIsUploading = () => { } }) {
-    const { data, setData, post, errors, reset, progress, processing } = useForm({
+    const { data, setData, post, errors, setError, reset, progress, processing } = useForm({
         image: null,
         caption: null,
     })
@@ -22,6 +22,12 @@ export default function ModalCreate({ open, setOpen, user, setIsUploading = () =
 
     function handleSubmit(e) {
         e.preventDefault()
+
+        data.caption == null && setError("caption", 'Caption must be added')
+        data.image == null && setError("image", 'Image must be added')
+        if (data.caption == null || data.image == null)
+            return
+
         post(route('posts.store', data), {
             preserveState: true,
             preserveScroll: true,
@@ -31,7 +37,6 @@ export default function ModalCreate({ open, setOpen, user, setIsUploading = () =
             },
             onFinish: () => setIsUploading(false),
         })
-        setOpen(false)
     }
     function onDropHandler(e) {
         e.preventDefault()
@@ -55,7 +60,13 @@ export default function ModalCreate({ open, setOpen, user, setIsUploading = () =
                         Create new post
                     </Dialog.Title>
 
-                    <button type='submit' disabled={processing} className='text-blue-500 hover:dark:text-white hover:text-black text-sm font-bold'>Share</button>
+                    <button
+                        type='submit'
+                        disabled={processing}
+                        className='text-blue-500 hover:dark:text-white hover:text-black text-sm font-bold'
+                    >
+                        Share
+                    </button>
                 </div>
                 <div className="flex grow dark:text-white">
                     <div className="flex object-contain flex-col w-7/12 p-4 grow items-center justify-center border-e dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15">

@@ -83,10 +83,25 @@ const ButtonInteraction = ({ children, name, onClick }) => {
     );
 }
 
-const LikeButton = () => {
-    const [isLiked, setIsLiked] = useState(false)
+const LikeButton = ({ postId, isLiked }) => {
+    const { data, setData, post } = useForm({
+        isLiked: isLiked,
+    });
+
+    const handleLike = (e) => {
+        e.preventDefault()
+        post(route('posts.likes', postId), {
+            onSuccess: () => {
+                setData('isLiked', !data.isLiked)
+            },
+            preserveState: true,
+            preserveScroll: true,
+            only: ['posts']
+        });
+    };
+
     return (
-        <button type='button' onClick={() => setIsLiked(!isLiked)}>
+        <button type='button' onClick={handleLike}>
             <svg aria-label='like' className={'size-6 ' + (isLiked ? 'fill-red-500' : 'fill-black dark:fill-white')} viewBox='0 0 16 16'>
                 {isLiked ?
                     <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
@@ -115,9 +130,9 @@ const ButtonInteractionsFeed = ({ children }) => {
     );
 }
 
-const Bottom = ({ className, children, postId, name, caption, withCaption = true }) => {
+const Bottom = ({ className, children, post, name, caption, withCaption = true }) => {
     const commentRef = useRef(null)
-    const { data, setData, post, reset, processing } = useForm({
+    const { data, setData, post: postForm, reset, processing } = useForm({
         comment: "",
     });
 
@@ -129,7 +144,7 @@ const Bottom = ({ className, children, postId, name, caption, withCaption = true
         e.preventDefault();
 
         if (data.comment.trim() !== "") {
-            post(route('comments.store', [postId, data]), {
+            postForm(route('comments.store', [post.id, data]), {
                 preserveState: true,
                 preserveScroll: true,
                 onSuccess: () => {
@@ -149,7 +164,7 @@ const Bottom = ({ className, children, postId, name, caption, withCaption = true
                 {children}
                 <div className="likes mt-1">
                     <span className="font-bold text-sm">
-                        0 likes
+                        {post.likes.length} likes
                     </span>
                 </div>
                 {withCaption &&

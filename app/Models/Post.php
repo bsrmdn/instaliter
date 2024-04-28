@@ -10,7 +10,7 @@ class Post extends Model
     use HasFactory;
 
     protected $guarded = ['user'];
-    protected $with = ['user', 'comments'];
+    protected $with = ['user', 'comments', 'likes'];
 
     public function user()
     {
@@ -20,6 +20,11 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function likes()
+    {
+        return $this->morphMany(Like::class, 'likeable');
     }
 
     public function scopeByUser($query, $userId)
