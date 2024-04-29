@@ -1,5 +1,6 @@
 import Avatar from '@/Components/Avatar'
 import Feed from '@/Components/Feed'
+import ModalEdit from '@/Components/Modal/ModalEdit'
 import ModalFeed from '@/Components/Modal/ModalFeed'
 import PrimaryButton from '@/Components/PrimaryButton'
 import SecondaryButton from '@/Components/SecondaryButton'
@@ -141,6 +142,7 @@ function TabContent() {
 
 //MARK:Post
 function Posts({ posts }) {
+    const [openEdit, setOpenEdit] = useState(false)
     const [open, setOpen] = useState(false)
     const [post, setPost] = useState(null)
 
@@ -177,7 +179,8 @@ function Posts({ posts }) {
                     </button>
                 )
             })}
-            {open && <ModalFeed open={open} setOpenFeed={setOpen} post={post} modalRef={modalRef} />}
+            {openEdit && <ModalEdit open={openEdit} setOpen={setOpenEdit} post={post} />}
+            {open && <ModalFeed open={open} setOpenFeed={setOpen} setOpenEdit={setOpenEdit} setPost={setPost} post={post} modalRef={modalRef} />}
 
         </div>
     )
