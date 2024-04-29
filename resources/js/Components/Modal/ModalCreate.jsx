@@ -37,6 +37,7 @@ export default function ModalCreate({ open, setOpen, user, setIsUploading = () =
             },
             onFinish: () => setIsUploading(false),
         })
+        setOpen(false)
     }
     function onDropHandler(e) {
         e.preventDefault()
@@ -45,7 +46,7 @@ export default function ModalCreate({ open, setOpen, user, setIsUploading = () =
 
     return (
         <Modal show={open} onClose={setOpen} modalRef={modalRef} maxWidth='max-w-4xl'>
-            <form className='flex flex-col h-[75vh]' onSubmit={handleSubmit} onDrop={onDropHandler} onDragOver={e => e.preventDefault()}>
+            <form className='flex flex-col h-[50vh] sm:h-[75vh]' onSubmit={handleSubmit} onDrop={onDropHandler} onDragOver={e => e.preventDefault()}>
                 {progress && <progress value={progress.percentage} max={100} className='w-full h-1' />}
                 <div className="flex justify-between p-3 border-b dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15">
                     <button

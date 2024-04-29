@@ -65,7 +65,7 @@ export default function Modal({ show, children, maxWidth = '2xl', closeable = tr
                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                     <Dialog.Panel
-                        className={`mb-6 bg-slate-50 dark:bg-neutral-900 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-[calc(100vw-8rem)] max-h-[calc(100vw-4rem)] mx-auto ${maxWidth}`}
+                        className={`mb-6 bg-slate-50 dark:bg-neutral-900 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-[calc(100vw-8rem)] max-h-[calc(100vh-4rem)] mx-auto ${maxWidth}`}
                     >
                         {children}
                     </Dialog.Panel>

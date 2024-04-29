@@ -32,7 +32,7 @@ function ModalFeed({ open, setOpenFeed = () => { }, setOpenEdit, modalRef, post,
     }
 
     return (
-        <Modal show={open} onClose={setOpenFeed} modalRef={modalRef} maxWidth='max-w-sm md:max-w-none max-h-none md:max-h-[calc(100vw-4rem)]'>
+        <Modal show={open} onClose={setOpenFeed} modalRef={modalRef} maxWidth='max-w-sm md:max-w-none max-h-none md:max-h-[calc(100vh-4rem)]'>
             <div className="flex flex-col md:flex-row max-h-[calc(100vh-8rem)]">
 
                 <div className="px-4 md:hidden block">
@@ -55,7 +55,7 @@ function ModalFeed({ open, setOpenFeed = () => { }, setOpenEdit, modalRef, post,
                             <Feed.HeaderDropdown children={"Delete Post"} onClick={() => deletePost(post.id)} className='text-red-500' />
                         </Feed.Header>
                     </div>
-                    <div className="p-4 flex-grow hidden overflow-y-scroll no-scrollbar md:block">
+                    <div className="p-4 flex-grow hidden overflow-y-scroll divide-y dark:divide-neutral-800 divide-neutral-200 no-scrollbar md:block">
                         <CaptionSection user={post.user} caption={post.caption} />
                         <CommentsSection comments={comments} />
                     </div>

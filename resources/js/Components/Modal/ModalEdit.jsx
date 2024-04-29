@@ -5,11 +5,12 @@ import { router, useForm } from '@inertiajs/react'
 import { useRef } from 'react'
 import Modal from './Modal'
 import useFileReader from '@/Hooks/useFileReader'
+import InputError from '../InputError'
 
 
 function ModalEdit({ post, open, setOpen }) {
 
-    const { data, setData, patch, errors, reset, progress, processing } = useForm({
+    const { data, setData, errors, setError, reset, progress, processing } = useForm({
         image: null,
         caption: null,
     })
@@ -18,6 +19,12 @@ function ModalEdit({ post, open, setOpen }) {
 
     function handleSubmit(e) {
         e.preventDefault()
+
+        if (data.caption.trim() == '') {
+            setError("caption", 'Caption must be added')
+            return
+        }
+
         router.post(route('posts.update', post.id), {
             _method: 'patch',
             image: data.image,
@@ -36,7 +43,7 @@ function ModalEdit({ post, open, setOpen }) {
     }
     return (
         <Modal show={open} onClose={setOpen} modalRef={modalRef}>
-            <form className='flex flex-col h-[75vh]' onSubmit={handleSubmit} onDrop={onDropHandler} onDragOver={e => e.preventDefault()}>
+            <form className='flex flex-col sm:h-[75vh]' onSubmit={handleSubmit} onDrop={onDropHandler} onDragOver={e => e.preventDefault()}>
                 {progress && <progress value={progress.percentage} max={100} className='w-full h-1' />}
                 <div className="flex justify-between p-3 border-b dark:border-gray-50 border-gray-950 border-opacity-15 dark:border-opacity-15">
                     <button
