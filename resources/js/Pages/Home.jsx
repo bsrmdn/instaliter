@@ -2,11 +2,11 @@ import PageLayout from '@/Layouts/PageLayout'
 import Avatar from '@/Components/Avatar'
 import Feed from '@/Components/Feed'
 import ModalEdit from '@/Components/Modal/ModalEdit'
-import { Link, useForm, usePage } from '@inertiajs/react';
-import React, { useContext, useEffect, useRef, useState, useTransition } from 'react'
-import { AuthContext, UploadPostContext } from '@/Context/Context';
-import HorizontalScroll from '@/Layouts/HorizontalScroll';
-import ModalFeed from '@/Components/Modal/ModalFeed';
+import { Link, useForm, usePage } from '@inertiajs/react'
+import React, { useContext, useEffect, useMemo, useRef, useState, useTransition } from 'react'
+import { AuthContext, UploadPostContext } from '@/Context/Context'
+import HorizontalScroll from '@/Layouts/HorizontalScroll'
+import ModalFeed from '@/Components/Modal/ModalFeed'
 
 const Home = ({ posts, users }) => {
     return (
@@ -30,7 +30,6 @@ Home.layout = page => <PageLayout children={page} />
 
 //MARK: Feeds
 function FeedLayout({ posts }) {
-    console.log('posts: ', posts);
     const auth = usePage().props.auth
     const { delete: destroy } = useForm({})
 
@@ -122,6 +121,7 @@ function FeedLayout({ posts }) {
 //MARK: Right Side
 function SideProfile({ users }) {
     const auth = useContext(AuthContext)
+    const randomUsers = useMemo(() => users.sort(() => Math.random() - 0.5), [users])
 
     return (
         <div className="px-4">
@@ -138,22 +138,20 @@ function SideProfile({ users }) {
             </div>
             <div className="py-5 space-y-4">
                 <p className='dark:text-gray-300 text-gray-600 text-sm'>Suggested for you</p>
-                {users.sort(() => Math.random() - 0.5)
-                    .slice(0, 5)
-                    .map((user, i) => {
-                        if (user.username != auth.user.username) {
-                            return <div key={i} className="flex items-center w-full">
-                                <Link as='button' href={route('profile.show', user.username)}>
-                                    <Avatar avatar={user.avatar} username={user.username} avatarOnly className={'size-11'} />
-                                </Link>
-                                <div className="flex flex-col w-full text-sm ms-3">
-                                    <Link as='button' href={route('profile.show', user.username)} className='font-semibold truncate w-36 text-left'>{user.username}</Link>
-                                    <p className='text-gray-400 text-xs font-extralight'>Suggested for you</p>
-                                </div>
-                                <Link as='button' role='button' className='text-xs text-blue-500 hover:text-white'>Follow</Link>
+                {randomUsers.slice(0, 5).map((user, i) => {
+                    if (user.username != auth.user.username) {
+                        return <div key={i} className="flex items-center w-full">
+                            <Link as='button' href={route('profile.show', user.username)}>
+                                <Avatar avatar={user.avatar} username={user.username} avatarOnly className={'size-11'} />
+                            </Link>
+                            <div className="flex flex-col w-full text-sm ms-3">
+                                <Link as='button' href={route('profile.show', user.username)} className='font-semibold truncate w-36 text-left'>{user.username}</Link>
+                                <p className='text-gray-400 text-xs font-extralight'>Suggested for you</p>
                             </div>
-                        }
-                    }, 0)}
+                            <Link as='button' role='button' className='text-xs text-blue-500 hover:text-white'>Follow</Link>
+                        </div>
+                    }
+                }, 0)}
             </div>
         </div>
     )
